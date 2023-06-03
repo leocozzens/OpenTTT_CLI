@@ -7,7 +7,7 @@
 #include <structs.h>
 
 void reset_board(Grid *board);
-void print_board(Grid *board);
+void print_board(Grid *board, _Bool indicators);
 void check_free_space(Grid *board);
 
 #endif

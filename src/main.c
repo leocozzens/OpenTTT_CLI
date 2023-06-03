@@ -7,6 +7,7 @@ int main() {
     char contGame; // This var will determine if the game loop continues
     char askSwap; // This will accept the prompt response of whether the user wants to swap
     _Bool turnSwap = 0;
+    _Bool indicators = 1;
     ScoreTracker scoreBoard = {0, 0};
     do {
         char winner = ' ';
@@ -30,7 +31,7 @@ int main() {
         // Game loop
         while (winner == ' ' && board.freeSpaces != 0) {
             if (playerTurn) {
-                print_board(&board);
+                print_board(&board, indicators);
                 player_move(&board);
                 playerTurn = 0;
             }
@@ -42,7 +43,7 @@ int main() {
             check_free_space(&board);   
         }
 
-        print_board(&board);
+        print_board(&board, indicators);
         print_winner(winner, board.player, board.opponent, &scoreBoard);
         
         if(grid_free(board.cells, board.height)) printf("\n ERROR: Not able to free memory for grid\n");
