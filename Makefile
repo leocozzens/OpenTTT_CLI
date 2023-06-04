@@ -5,7 +5,7 @@ OBJ = obj
 BINDIR = bin
 SRCS = $(wildcard $(SRC)/*.c)
 OBJS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
-BIN = $(BINDIR)/main.out
+BIN = $(BINDIR)/main.exe # For windows compatability
 
 SUBMITNAME = OpenTTT.zip
 RM = rm

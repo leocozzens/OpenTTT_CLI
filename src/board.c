@@ -3,6 +3,8 @@
 // Local headers
 #include <structs.h>
 
+#define clear() printf("\e[1;1H\e[2J") // Portable clear screen
+
 void reset_board(Grid *board) { // Iterates once each for rows and columns and sets each index to space
     for(int i = 0; i < board->height; i++) {
         for(int j = 0; j < board->width; j++) {
@@ -12,6 +14,7 @@ void reset_board(Grid *board) { // Iterates once each for rows and columns and s
 }
 
 void print_board(Grid *board, _Bool indicators) { // Formats the indices of the board into a readable output based on chosen board size
+    clear();
     printf("\n");
     int yIterations = 0;
     char columnIdent = 'A';

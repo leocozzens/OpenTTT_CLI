@@ -85,10 +85,11 @@ void validate_input(int *input, int min, int max, char *data, char dataType) {
     char buffer[FGETS_BUFFER_SIZE];
     _Bool parsed = 1;
     char firstChar = 64;
+    int i = 0;
 
     if(dataType == 'c') {
-        min += 64;
-        max += 64;
+        min += firstChar;
+        max += firstChar;
     }
 
     do {
@@ -97,10 +98,12 @@ void validate_input(int *input, int min, int max, char *data, char dataType) {
 
         fgets(buffer, FGETS_BUFFER_SIZE, stdin);
         if(dataType == 'd') parsed = parse_int(buffer, input, digit_num(max) + 1); // Any number 1 digit above the max will confirm as an integer but notify the user it wasn't in the expected range
-        else *input = (int) toupper(buffer[0]);
-
+        else if(dataType == 'c') {
+            while(isspace(buffer[i])) i++;
+            *input = (int) toupper(buffer[i]);
+        }
         if(!parsed && dataType == 'd') printf("\nPlease enter a number.\n");
         else if((*input > max || *input < min) && dataType == 'd') printf("\nYou did not enter an integer between %d and %d\n", min, max);
-        else if((*input > max || *input < min) && dataType == 'c') printf("\nYou did not enter an character between %c and %c\n", min, max);
+        else if((*input > max || *input < min) && dataType == 'c' && !isspace(buffer[i + 1])) printf("\nYou did not enter an character between %c and %c\n", min, max);
     }while(!parsed || (*input > max || *input < min));
 }
