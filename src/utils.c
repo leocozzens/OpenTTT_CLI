@@ -61,7 +61,7 @@ _Bool parse_int(char *string, int *integer, int max) { // Counts max integer dec
     return 1;
 }
 
-/*int digit_num(int digits) {
+int digit_num(int digits) {
     int count = 0;
     do {
         digits /= 10;
@@ -69,7 +69,7 @@ _Bool parse_int(char *string, int *integer, int max) { // Counts max integer dec
     }while(digits != 0);
 
     return count;
-}*/
+}
 
 _Bool grid_free(char **target, int rows) { // Free's memory of 2D array on heap, also checks for error and will return true if any of the pointers memory addresses are undefined
     if(target == NULL) return 1;
@@ -96,7 +96,7 @@ void validate_input(int *input, int min, int max, char *data, char dataType) {
         else printf("Enter %s #(%c-%c): ", data, min, max);
 
         fgets(buffer, FGETS_BUFFER_SIZE, stdin);
-        if(dataType == 'd') parsed = parse_int(buffer, input, 3); // Any number above 3 digits will confirm as an integer but notify the user it wasn't in the expected range
+        if(dataType == 'd') parsed = parse_int(buffer, input, digit_num(max) + 1); // Any number 1 digit above the max will confirm as an integer but notify the user it wasn't in the expected range
         else *input = (int) toupper(buffer[0]);
 
         if(!parsed && dataType == 'd') printf("\nPlease enter a number.\n");
