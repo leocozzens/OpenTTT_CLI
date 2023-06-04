@@ -4,19 +4,40 @@
 #include <structs.h>
 #include <utils.h>
 
-typedef struct { // Struct essentially serves as a scoreboard template
-    int playerScore;
-    int opponentScore;
-} ScoreTracker;
+void game_type(Grid *board, _Bool *indicators) {
+    char gameType;
+    char askIndicators;
+    printf("Would you like to play standard or custom? (S or C): ");
+    scanf("%c", &gameType);
+    getchar(); // Clear the input stream of the newline char
+    if(tolower(gameType) == 'c') {
+        printf("Chose board size: \n");
 
-void player_move(Grid *board) { // Function allows player to place their next move by entering the desired square's coordinates (row, column)
+        validate_input(&board->height, 1, 30, "board height", 'd');
+        validate_input(&board->width, 1, 30, "board width", 'd');
+        validate_input(&board->patternLength, 3, num_max(board->height, board->width), "pattern length", 'd');
+
+        printf("Would you like row and column indicators? (Y or N): ");
+        scanf("%c", &askIndicators);
+        getchar(); // Clear newline from the input stream
+        if(tolower(askIndicators) == 'y') *indicators = 1;
+    }
+}
+
+void player_move(Grid *board, _Bool indicators) { // Function allows player to place their next move by entering the desired square's coordinates (row, column)
     int rows;
     int columns;
+    char dataType;
+    if(indicators) dataType = 'c';
+    else dataType = 'd';
     do {
-        validateInt(&rows, board->height, 1, "rows"); // Runs validate utility to correctly handle and receive user prompt then process into integer
-        validateInt(&columns, board->width, 1, "columns");
+        validate_input(&rows, 1, board->height, "row", 'd'); // Runs validate utility to correctly handle and receive user prompt then process into integer
+        validate_input(&columns, 1, board->width, "column", dataType);
+        printf("\nRows: %d\nColumns: %d", rows, columns);
         rows--; // Iterate both rows and columns down to be valid array indices
-        columns--;
+        if(dataType == 'd') columns--;
+        else columns -= 65;
+        printf("\nRows: %d\nColumns: %d", rows, columns);
 
         //printf("Player move\n"); Purely for debugging
         if(board->cells[rows][columns] != ' ') {

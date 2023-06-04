@@ -8,6 +8,12 @@ typedef struct {
     int freeSpaces;
     char player;
     char opponent;
+    int patternLength;
 } Grid;
+
+typedef struct {
+    int playerScore;
+    int opponentScore;
+} ScoreTracker;
 
 #endif

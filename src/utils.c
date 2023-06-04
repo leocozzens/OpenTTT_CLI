@@ -4,26 +4,26 @@
 #include <string.h>
 #include <ctype.h>
 // Local headers
-#include <structs.h>
+// #include <structs.h> Utils no longer needs grid struct
 
 #define FGETS_BUFFER_SIZE 4096
 
-Grid dynamic_grid(int rows, int columns) {
-    Grid grid;
-    grid.height = rows;
-    grid.width = columns;
+int num_max(int num1, int num2) {
+    return (num1 > num2) ? num1 : num2;
+}
 
-    grid.cells = malloc(rows * (sizeof(char*))); // Allocate memory to the size of rows * char pointers
+char **dynamic_grid(int rows, int columns) {
+    char **grid = NULL;
+    grid = malloc(rows * (sizeof(char*))); // Allocate memory to the size of rows * char pointers
 
-    if(grid.cells == NULL) { // Error handling: Failed to allocate memory for grid.cells so return an empty grid
-        grid.height = 0;
-        grid.width = 0;
+    if(grid == NULL) { // Error handling: Failed to allocate memory for grid.cells so return an empty grid
+        grid = NULL;
 
         return grid;
     }
 
     for(int i = 0; i < rows; i++) {
-        grid.cells[i] = (char*) malloc(columns * (sizeof(char))); // Allocate each index of grid to a new set of columns * char size
+        grid[i] = (char*) malloc(columns * (sizeof(char))); // Allocate each index of grid to a new set of columns * char size
     }
     return grid;
 }
@@ -61,7 +61,7 @@ _Bool parse_int(char *string, int *integer, int max) { // Counts max integer dec
     return 1;
 }
 
-int digit_num(int digits) {
+/*int digit_num(int digits) {
     int count = 0;
     do {
         digits /= 10;
@@ -69,7 +69,7 @@ int digit_num(int digits) {
     }while(digits != 0);
 
     return count;
-}
+}*/
 
 _Bool grid_free(char **target, int rows) { // Free's memory of 2D array on heap, also checks for error and will return true if any of the pointers memory addresses are undefined
     if(target == NULL) return 1;
@@ -81,14 +81,26 @@ _Bool grid_free(char **target, int rows) { // Free's memory of 2D array on heap,
     return 0;
 }
 
-void validateInt(int *integer, int max, int min, char *data) {
+void validate_input(int *input, int min, int max, char *data, char dataType) {
     char buffer[FGETS_BUFFER_SIZE];
-    _Bool parsed;
+    _Bool parsed = 1;
+    char firstChar = 64;
+
+    if(dataType == 'c') {
+        min += 64;
+        max += 64;
+    }
+
     do {
-        printf("Enter %s #(%d-%d): ", data, min, max);
+        if(dataType == 'd') printf("Enter %s #(%d-%d): ", data, min, max);
+        else printf("Enter %s #(%c-%c): ", data, min, max);
+
         fgets(buffer, FGETS_BUFFER_SIZE, stdin);
-        parsed = parse_int(buffer, integer, digit_num(max));
-        if(!parsed) printf("\nPlease enter a number.\n");
-        else if(*integer > max || *integer < min) printf("\nYou did not enter an integer between 1 and %d\n", max);
-    }while(!parsed || (*integer > max || *integer < min));
+        if(dataType == 'd') parsed = parse_int(buffer, input, 3); // Any number above 3 digits will confirm as an integer but notify the user it wasn't in the expected range
+        else *input = (int) toupper(buffer[0]);
+
+        if(!parsed && dataType == 'd') printf("\nPlease enter a number.\n");
+        else if((*input > max || *input < min) && dataType == 'd') printf("\nYou did not enter an integer between %d and %d\n", min, max);
+        else if((*input > max || *input < min) && dataType == 'c') printf("\nYou did not enter an character between %c and %c\n", min, max);
+    }while(!parsed || (*input > max || *input < min));
 }

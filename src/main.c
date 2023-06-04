@@ -5,19 +5,22 @@
 
 int main() {
     char contGame; // This var will determine if the game loop continues
-    char askSwap; // This will accept the prompt response of whether the user wants to swap
+
     _Bool turnSwap = 0;
-    _Bool indicators = 1;
-    ScoreTracker scoreBoard = {0, 0};
+    ScoreTracker scoreBoard = {0, 0}; // Initialize scoreboard to track player scores
+    Grid board; // Initialize grid struct to hold board elements
+    board.height = 3;
+    board.width = 3;
+    board.patternLength = 3;
+
+    _Bool indicators = 0;
+
+    game_type(&board, &indicators);
     do {
         char winner = ' ';
-        int height = 3;
-        int width = 3;
-        int patternLength = 3;
         _Bool playerTurn = !turnSwap; // Will track the current player's turn
 
-        Grid board; // Initialize grid struct to hold board elements
-        board = dynamic_grid(height, width); // Dynamic grid will create a 2D array to store board positions
+        board.cells = dynamic_grid(board.height, board.width); // Dynamic grid will create a 2D array to store board positions
         board.player = 'X'; // TODO: Character customization prompts for players
         board.opponent = 'O';
         board.freeSpaces = board.height * board.width;
@@ -25,21 +28,19 @@ int main() {
         reset_board(&board);
         //printf("Would you like to play versus A.I., Local Multiplayer, or Online Multiplayer");
         //printf("Would you like to play Tic Tac Toe, or Connect 4?");
-        //printf("Would you like to play standard or custom?")
-        //printf("Chose board size: 5x5 (Type 5), 7x7 (Type 7), or Custom (type C)");
 
         // Game loop
         while (winner == ' ' && board.freeSpaces != 0) {
             if (playerTurn) {
                 print_board(&board, indicators);
-                player_move(&board);
+                player_move(&board, indicators);
                 playerTurn = 0;
             }
             else {
                 computer_move(&board);
                 playerTurn = 1;
             }
-            check_winner(&board, &winner, patternLength);
+            check_winner(&board, &winner, board.patternLength);
             check_free_space(&board);   
         }
 
@@ -52,7 +53,8 @@ int main() {
         scanf("%c", &contGame);
         getchar(); // Clear newline from the input stream (scanf will leave it in)
 
-        if(tolower(contGame) == 'y') {
+        if(tolower(contGame) == 'y') { 
+            char askSwap; // This will accept the prompt response of whether the user wants to swap
             printf("Would you like to swap turn order? (Y OR N): ");
             scanf("%c", &askSwap);
             getchar(); // Clear newline from the input stream (scanf will leave it in)
