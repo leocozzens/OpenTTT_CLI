@@ -4,14 +4,27 @@
 #include <structs.h>
 #include <utils.h>
 
-void game_type(Grid *board, _Bool *indicators) {
+void game_type(Grid *board, _Bool *indicators, int *playerMode) {
     char gameType;
     char askIndicators;
-    printf("Would you like to play standard or custom? (S or C): ");
+
+    printf("\nWould you like to play versus A.I. (A), Local Multiplayer (B), or Online Multiplayer (C)?\n");
+    validate_input(playerMode, 1, 3, "game type", 'c');
+    if((char) *playerMode == 'A') printf("\nSingle Player mode selected.\n\n");
+    else if((char) *playerMode == 'B') printf("\nLocal Multiplayer mode selected.\n\n");
+    else {
+        printf("\nFunctionality not yet implemented.\n\n");
+        *playerMode = (int) 'A';
+    }
+
+    //printf("Would you like to play Tic Tac Toe, or Connect 4?");
+
+    printf("Would you like to play standard or custom? (S or C): "); // Defaults to S
     scanf("%c", &gameType);
     getchar(); // Clear the input stream of the newline char
+
     if(tolower(gameType) == 'c') {
-        printf("Chose board size: \n");
+        printf("\nChose board size: \n");
 
         validate_input(&board->height, 3, 30, "board height", 'd');
         validate_input(&board->width, 3, 30, "board width", 'd');
@@ -133,13 +146,15 @@ void check_winner(Grid *board, char *winnerVar, int patternLength) { // Checks f
     }
 }
 
-void print_winner(char winner, char player, char opponent, ScoreTracker *scoreBoard) { // Checks the winnervar to see if it matches either player
+void print_winner(char winner, char player, char opponent, ScoreTracker *scoreBoard, int playerMode) { // Checks the winnervar to see if it matches either player
     if(winner == player) {
-        printf("You win!\n\n");
+        if((char) playerMode == 'A') printf("You win!\n\n");
+        else printf("Player %c wins!", player);
         scoreBoard->playerScore++; // Iterates the corresponding score
     }
     else if(winner == opponent) {
-        printf("You lose!\n\n");
+        if((char) playerMode == 'A') printf("You lose!\n\n");
+        else printf("Player %c wins!", opponent);
         scoreBoard->opponentScore++;
     }
     else {  // Persistent "Cat's game" means this statement is recieving an incorrect input

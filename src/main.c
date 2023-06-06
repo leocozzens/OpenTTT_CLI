@@ -14,8 +14,9 @@ int main() {
     board.patternLength = 3;
 
     _Bool indicators = 0;
+    int playerMode;
 
-    game_type(&board, &indicators);
+    game_type(&board, &indicators, &playerMode);
     do {
         char winner = ' ';
         _Bool playerTurn = !turnSwap; // Will track the current player's turn
@@ -26,18 +27,28 @@ int main() {
         board.freeSpaces = board.height * board.width;
 
         reset_board(&board);
-        //printf("Would you like to play versus A.I., Local Multiplayer, or Online Multiplayer");
-        //printf("Would you like to play Tic Tac Toe, or Connect 4?");
 
         // Game loop
         while (winner == ' ' && board.freeSpaces != 0) {
             if (playerTurn) {
                 print_board(&board, indicators);
+                print_turn(playerMode, board.player);
                 player_move(&board, indicators);
                 playerTurn = 0;
             }
-            else {
+            else if((char) playerMode == 'A') {
                 computer_move(&board);
+                playerTurn = 1;
+            }
+            else {
+                char temp = board.player;
+                board.player = board.opponent;
+
+                print_board(&board, indicators);
+                print_turn(playerMode, board.player);
+                player_move(&board, indicators);
+
+                board.player = temp;
                 playerTurn = 1;
             }
             check_winner(&board, &winner, board.patternLength);
@@ -45,7 +56,7 @@ int main() {
         }
 
         print_board(&board, indicators);
-        print_winner(winner, board.player, board.opponent, &scoreBoard);
+        print_winner(winner, board.player, board.opponent, &scoreBoard, playerMode);
         
         if(grid_free(board.cells, board.height)) printf("\n ERROR: Not able to free memory for grid\n");
 

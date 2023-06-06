@@ -10,6 +10,7 @@
 
 void reset_board(Grid *board);
 void print_board(Grid *board, _Bool indicators);
+void print_turn(char playerMode, char player);
 void check_free_space(Grid *board);
 
 #endif

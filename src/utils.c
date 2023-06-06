@@ -104,6 +104,6 @@ void validate_input(int *input, int min, int max, char *data, char dataType) {
         }
         if(!parsed && dataType == 'd') printf("\nPlease enter a number.\n");
         else if((*input > max || *input < min) && dataType == 'd') printf("\nYou did not enter an integer between %d and %d\n", min, max);
-        else if((*input > max || *input < min) && dataType == 'c' && !isspace(buffer[i + 1])) printf("\nYou did not enter an character between %c and %c\n", min, max);
+        else if(((*input > max || *input < min) || !isspace(buffer[i + 1]))  && dataType == 'c') printf("\nYou did not enter an character between %c and %c\n", min, max);
     }while(!parsed || (*input > max || *input < min));
 }

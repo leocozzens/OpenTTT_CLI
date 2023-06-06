@@ -38,6 +38,10 @@ void print_board(Grid *board, _Bool indicators) { // Formats the indices of the 
     }
 }
 
+void print_turn(char playerMode, char player) {
+    if((char) playerMode != 'A') printf("\n\nPlayer Turn: %c\n", player);
+}
+
 void check_free_space(Grid *board) { 
     board->freeSpaces = board->height * board->width; // Establishes the maximum alloted number of free spaces based on chosen board size
     for(int i = 0; i < board->height; i++) {
