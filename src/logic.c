@@ -149,12 +149,12 @@ void check_winner(Grid *board, char *winnerVar, int patternLength) { // Checks f
 void print_winner(char winner, char player, char opponent, ScoreTracker *scoreBoard, int playerMode) { // Checks the winnervar to see if it matches either player
     if(winner == player) {
         if((char) playerMode == 'A') printf("You win!\n\n");
-        else printf("Player %c wins!", player);
+        else printf("Player %c wins!\n\n", player);
         scoreBoard->playerScore++; // Iterates the corresponding score
     }
     else if(winner == opponent) {
         if((char) playerMode == 'A') printf("You lose!\n\n");
-        else printf("Player %c wins!", opponent);
+        else printf("Player %c wins!\n\n", opponent);
         scoreBoard->opponentScore++;
     }
     else {  // Persistent "Cat's game" means this statement is recieving an incorrect input
