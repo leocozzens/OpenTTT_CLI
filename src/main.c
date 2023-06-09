@@ -6,8 +6,6 @@
 int main() {
     char contGame; // This var will determine if the game loop continues
 
-    _Bool turnSwap = 0;
-    ScoreTracker scoreBoard = {0, 0}; // Initialize scoreboard to track player scores
     Grid board; // Initialize grid struct to hold board elements
     board.height = 3;
     board.width = 3;
@@ -18,6 +16,10 @@ int main() {
 
     game_type(&board, &indicators, &playerMode);
     do {
+        // Static variables (these will persist between loops)
+        static _Bool turnSwap = 0;
+        static ScoreTracker scoreBoard = {0, 0};
+        // Instance variables
         char winner = ' ';
         _Bool playerTurn = !turnSwap; // Will track the current player's turn
 
